@@ -32,4 +32,4 @@ WORKDIR /opt/mern-app
 EXPOSE 5000
 
 # Start MongoDB and Nginx
-CMD ["sh", "-c", "mongod --fork --logpath /var/log/mongodb.log &&, npm run server"]
+CMD ["bash", "-c", "mongod --fork --logpath /var/log/mongodb.log &&, npm run server"]
