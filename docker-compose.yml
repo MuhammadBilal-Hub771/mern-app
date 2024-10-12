@@ -3,7 +3,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image_name: mern-app
+    image: mern-app
     ports:
       - "5000:5000"
     container_name: final-project
