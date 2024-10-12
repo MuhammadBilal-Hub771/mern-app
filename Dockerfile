@@ -30,6 +30,7 @@ RUN npm install
 RUN npm run build
 WORKDIR /opt/mern-app
 EXPOSE 5000
+RUN mkdir -p /data/db && chown -R mongodb:mongodb /data/db
 
 # Start MongoDB and Nginx
 CMD ["bash", "-c", "mongod --bind_ip_all --dbpath /data/db --logpath /var/log/mongodb/mongodb.log --fork && npm run server"]
