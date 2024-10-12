@@ -1,20 +1,35 @@
-# Use an official Node.js runtime as the base image
-FROM node:20
+# Use Ubuntu as base image
+FROM ubuntu
 
-# Set the working directory inside the container
-WORKDIR /app
+# Install required packages
+RUN apt-get update && \
+    apt-get install -y curl gnupg lsb-release && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copy the package.json and package-lock.json files
-COPY package*.json ./
+  
+WORKDIR /opt/mern-app
 
-# Install the dependencies
+# Install Node.js and npm using Nodesource
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install MongoDB
+RUN curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
+    gpg --dearmor -o /usr/share/keyrings/mongodb-server-8.0.gpg && \
+    echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/8.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-8.0.list && \
+    apt-get update && \
+    apt-get install -y mongodb-org && \
+    rm -rf /var/lib/apt/lists/*
+
+# Clone your repository
+ADD https://github.com/MuhammadBilal-Hub771/mern-app.git .
+RUN npm install 
+WORKDIR /opt/app/frontend
 RUN npm install
-
-# Copy the rest of the application files
-COPY . .
-
-# Expose the port the application runs on
+RUN npm run build
+WORKDIR /opt/mern-app
 EXPOSE 5000
 
-# Start the application
-CMD ["npm", "start"]
+# Start MongoDB and Nginx
+CMD ["sh", "-c", "mongod --fork --logpath /var/log/mongodb.log &&, npm run server"]
