@@ -25,7 +25,7 @@ RUN curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
 # Clone your repository
 ADD https://github.com/MuhammadBilal-Hub771/mern-app.git .
 RUN npm install 
-WORKDIR /opt/app/frontend
+WORKDIR /opt/mern-app/frontend
 RUN npm install
 RUN npm run build
 WORKDIR /opt/mern-app
