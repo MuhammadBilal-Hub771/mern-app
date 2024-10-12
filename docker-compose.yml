@@ -1,48 +1,14 @@
-version: '3'
-
 services:
-  # Backend service for Node.js API
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+
   backend:
-    build: 
+    build:
       context: ./backend
-    container_name: mern-backend
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./backend:/usr/src/app
-    depends_on:
-      - mongodb
-    networks:
-      - mern-stack
-
-  # Frontend service for React
-  frontend:
-    build: 
-      context: ./frontend
-    container_name: mern-frontend
-    ports:
-      - "80:80"
-    networks:
-      - mern-stack
-
-  # MongoDB service (optional)
-  mongodb:
-    image: mongo
-    container_name: mern-mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-    networks:
-      - mern-stack
-
-# Named volumes to persist MongoDB data
-volumes:
-  mongodb_data:
-
-# Define custom network for your stack
-networks:
-  mern-stack:
-    driver: bridge
